@@ -94,7 +94,7 @@ app.mainloop()
   | _cancel_button_color_ | color of the **close** button |
   | **_icon_** | icon that will be shown in the messagebox [Default is 'info'] |
   | _icon_size_ | define the size of the icon image manually (tuple) |
-  | _corner_radius_ | corner roundness of the messagebox window |
+  | _corner_radius_ | corner roundness of the messagebox window [**only works with windows**] |
   | _font_ | font of the messagebox text (tuple) |
 
 ### Icons
