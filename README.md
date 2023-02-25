@@ -88,6 +88,7 @@ app.mainloop()
   | **_option_3_** | the text of the last button |
   | _button_color_ | color of the buttons |
   | _text_color_ | color of the message-text |
+  | _title_color_ | color of the title-text |
   | _button_text_color_ | color of the button-text |
   | _button_width_ | width of the buttons in px |
   | _cancel_button_color_ | color of the **close** button |
