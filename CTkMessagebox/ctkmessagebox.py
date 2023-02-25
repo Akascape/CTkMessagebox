@@ -1,12 +1,12 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.0
+Version: 1.1
 """
 
 import customtkinter
 from PIL import Image
-import os
+import os, sys
 
 class CTkMessagebox(customtkinter.CTkToplevel):
     
@@ -43,7 +43,12 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.resizable(width=False, height=False)
         self.overrideredirect(1)
         self.config(background='#000001')
-        self.attributes("-transparentcolor", '#000001')
+        
+        if sys.platform.startswith("win"):
+            self.attributes("-transparentcolor", '#000001')
+        else:
+            corner_radius = 0
+            
         self.protocol("WM_DELETE_WINDOW", self.close_window)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
