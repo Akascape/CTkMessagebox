@@ -17,6 +17,8 @@ pip install CTkMessagebox
 
 [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkMessagebox?&color=green&label=Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="300">](https://github.com/Akascape/CTkMessagebox/archive/refs/heads/main.zip)
 
+**Latest version: 1.2**
+
 ## How it looks?
 ![Screenshot](https://user-images.githubusercontent.com/89206401/221258593-75058878-b598-40c3-828a-1d44a6cefb73.jpg)
 
@@ -63,7 +65,6 @@ app.columnconfigure(0, weight=1)
 app.minsize(200,250)
 
 customtkinter.CTkLabel(app, text="CTk Messagebox Examples").grid(padx=20)
-
 customtkinter.CTkButton(app, text="Check CTkMessagebox", command=show_checkmark).grid(padx=20, pady=10, sticky="news")
 customtkinter.CTkButton(app, text="Show Info", command=show_info).grid(padx=20, pady=10, sticky="news")
 customtkinter.CTkButton(app, text="Show Error", command=show_error).grid(padx=20, pady=10, sticky="news")
@@ -83,9 +84,9 @@ app.mainloop()
   | _bg_color_  | background color of the messagebox |
   | **_title_** | title of the messagebox |
   | **_message_** | main message of the messagebox which will be shown at the center |
-  | **_option_1_** | the text of the first button [Default is 'OK'] |
-  | **_option_2_** | the text of the second button |
-  | **_option_3_** | the text of the last button |
+  | **_option_1_** | the text on the first button [Default is 'OK'] |
+  | **_option_2_** | the text on the second button |
+  | **_option_3_** | the text on the last button |
   | _button_color_ | color of the buttons |
   | _text_color_ | color of the message-text |
   | _title_color_ | color of the title-text |
@@ -94,7 +95,7 @@ app.mainloop()
   | _cancel_button_color_ | color of the **close** button |
   | **_icon_** | icon that will be shown in the messagebox [Default is 'info'] |
   | _icon_size_ | define the size of the icon image manually (tuple) |
-  | _corner_radius_ | corner roundness of the messagebox window [**only works with windows**] |
+  | _corner_radius_ | corner roundness of the messagebox window [**not applicable in linux**] |
   | _font_ | font of the messagebox text (tuple) |
 
 ### Icons
@@ -103,7 +104,7 @@ app.mainloop()
 
 ![icons](https://user-images.githubusercontent.com/89206401/221258403-aafea575-856e-4f4e-b3af-f995785c9879.png)
 
-(*These icons are created by me using Paint.Net, free to use!*)
+(*These icons are created by me using Paint.NET, free to use!*)
 
 **For custom images, just use `icon="path_to_the_image.png"`**
 
