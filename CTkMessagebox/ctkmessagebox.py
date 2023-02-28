@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.1
+Version: 1.2
 """
 
 import customtkinter
@@ -42,17 +42,22 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.title(title)
         self.resizable(width=False, height=False)
         self.overrideredirect(1)
-        self.config(background='#000001')
+        self.attributes("-topmost", True)
         
         if sys.platform.startswith("win"):
-            self.attributes("-transparentcolor", '#000001')
+            self.transparent_color = '#000001'
+            self.attributes("-transparentcolor", self.transparent_color)
+        elif sys.platform.startswith("darwin"):
+            self.transparent_color = 'systemTransparent'
+            self.attributes("-transparent", True)
         else:
+            self.transparent_color = '#000001'
             corner_radius = 0
             
-        self.protocol("WM_DELETE_WINDOW", self.close_window)
+        self.config(background=self.transparent_color)
+        self.protocol("WM_DELETE_WINDOW", self.button_event)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
-        self.attributes("-topmost", True)
+        self.grid_rowconfigure(0, weight=1)    
         self.lift()
         
         self.x = self.winfo_x()
@@ -106,8 +111,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         else:
             self.icon = customtkinter.CTkImage(Image.open(icon), size=self.size) if icon else None
 
-        self.frame_top = customtkinter.CTkFrame(self, corner_radius=self.round_corners, width=self.width, bg_color='#000001',
-                                                fg_color=self.bg_color)
+        self.frame_top = customtkinter.CTkFrame(self, corner_radius=self.round_corners, width=self.width,
+                                                bg_color=self.transparent_color, fg_color=self.bg_color)
         self.frame_top.grid(sticky="nswe")
         self.frame_top.grid_columnconfigure((0,1,2), weight=1)
         self.frame_top.grid_rowconfigure((0,1,2), weight=1)
@@ -115,7 +120,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.frame_top.bind("<ButtonPress-1>", self.oldxyset)
         
         self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False,
-                                           text="", fg_color=self.dot_color, command=self.close_window)
+                                           text="", fg_color=self.dot_color, command=self.button_event)
         self.button_close.configure(cursor="arrow")        
         self.button_close.grid(row=0, column=2, sticky="ne", padx=10, pady=10)
 
@@ -164,11 +169,6 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.x = event.x_root - self.oldx
         self.geometry(f'+{self.x}+{self.y}')
         
-    def close_window(self): 
-        self.grab_release()
-        self.destroy()
-        self.event = None
-        
     def button_event(self, event=None):
         self.grab_release()
         self.destroy()
@@ -177,3 +177,4 @@ class CTkMessagebox(customtkinter.CTkToplevel):
 if __name__ == "__main__":
     app = CTkMessagebox()
     app.mainloop()
+    
