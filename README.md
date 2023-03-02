@@ -92,8 +92,10 @@ app.mainloop()
   | _title_color_ | color of the title-text |
   | _button_text_color_ | color of the button-text |
   | _button_width_ | width of the buttons in px |
-  | _cancel_button_color_ | color of the **close** button |
-  | **_icon_** | icon that will be shown in the messagebox [Default is 'info'] |
+  | _border_width_ | width of the border around the main frame [Default is 0] |
+  | _border_color_ | color of the frame border |
+  | _cancel_button_color_ | color of the **close** button, **set it to 'transparent' if you want to hide it** |
+  | **_icon_** | icon that will be shown in the messagebox [Default is the 'info' icon] |
   | _icon_size_ | define the size of the icon image manually (tuple) |
   | _corner_radius_ | corner roundness of the messagebox window [**not applicable in linux**] |
   | _font_ | font of the messagebox text (tuple) |
