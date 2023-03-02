@@ -17,7 +17,7 @@ pip install CTkMessagebox
 
 [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkMessagebox?&color=green&label=Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="300">](https://github.com/Akascape/CTkMessagebox/archive/refs/heads/main.zip)
 
-**Latest version: 1.2**
+**Latest version: 1.3**
 
 ## How it looks?
 ![Screenshot](https://user-images.githubusercontent.com/89206401/221258593-75058878-b598-40c3-828a-1d44a6cefb73.jpg)
