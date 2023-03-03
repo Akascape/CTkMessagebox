@@ -52,7 +52,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.geometry(f"{self.width}x{self.height}+{self.spawn_x}+{self.spawn_y}")
         self.title(title)
         self.resizable(width=False, height=False)
-        self.overrideredirect(1)
+        if not header: self.overrideredirect(1)
         self.attributes("-topmost", True)
         
         if sys.platform.startswith("win"):
@@ -171,7 +171,6 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.button_3.grid(row=2, column=0, sticky="news", padx=(10,0), pady=10)
 
         if header:
-            self.overrideredirect(0)
             self.title_label.grid_forget()
             self.button_close.grid_forget()
             self.frame_top.configure(corner_radius=0)
