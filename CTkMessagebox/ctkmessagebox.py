@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.3
+Version: 1.4
 """
 
 import customtkinter
@@ -11,7 +11,7 @@ import os, sys
 class CTkMessagebox(customtkinter.CTkToplevel):
     
     def __init__(self,
-                 master_window: any = None,
+                 master: any = None,
                  width: int = 400,
                  height: int = 200,
                  title: str = "CTkMessagebox",
@@ -19,7 +19,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  option_1: str = "OK",
                  option_2: str = None,
                  option_3: str = None,
-                 border_width: int = 0,
+                 border_width: int = 1,
                  border_color: str = "default",
                  button_color: str = "default",
                  bg_color: str = "default",
@@ -32,18 +32,22 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  icon: str = "info",
                  icon_size: tuple = None,
                  corner_radius: int = 15,
-                 font: tuple = None):
+                 font: tuple = None,
+                 header: bool = False):
         
         super().__init__()
 
+        self.master_window = master
         self.width = 250 if width<250 else width
-        self.height = 180 if height<180 else  height
-        if master_window == None:
+        self.height = 150 if height<150 else  height
+        
+        if self.master_window is None:
             self.spawn_x = int((self.winfo_screenwidth()-self.width)/2)
             self.spawn_y = int((self.winfo_screenheight()-self.height)/2)
         else:
-            self.spawn_x = int(master_window.winfo_width() * .5 + master_window.winfo_x() - .5 * self.width + 7)
-            self.spawn_y = int(master_window.winfo_height() * .5 + master_window.winfo_y() - .5 * self.height + 20)
+            self.spawn_x = int(self.master_window.winfo_width() * .5 + self.master_window.winfo_x() - .5 * self.width + 7)
+            self.spawn_y = int(self.master_window.winfo_height() * .5 + self.master_window.winfo_y() - .5 * self.height + 20)
+            
         self.after(10)
         self.geometry(f"{self.width}x{self.height}+{self.spawn_x}+{self.spawn_y}")
         self.title(title)
@@ -66,7 +70,6 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)    
         self.lift()
-        
         self.x = self.winfo_x()
         self.y = self.winfo_y()
         self._title = title
@@ -166,9 +169,15 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
                                                     command=lambda: self.button_event(self.option_text_3))
             self.button_3.grid(row=2, column=0, sticky="news", padx=(10,0), pady=10)
+
+        if header:
+            self.overrideredirect(0)
+            self.title_label.grid_forget()
+            self.button_close.grid_forget()
+            self.frame_top.configure(corner_radius=0)
             
         self.grab_set()
-        
+            
     def get(self):
         self.master.wait_window(self)
         return self.event
