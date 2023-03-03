@@ -17,7 +17,7 @@ pip install CTkMessagebox
 
 [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkMessagebox?&color=green&label=Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="300">](https://github.com/Akascape/CTkMessagebox/archive/refs/heads/main.zip)
 
-**Latest version: 1.3**
+[![PyPI](https://img.shields.io/pypi/v/CTkMessagebox?style=flat)](https://pypi.org/project/CTkMessagebox)
 
 ## How it looks?
 ![Screenshot](https://user-images.githubusercontent.com/89206401/221258593-75058878-b598-40c3-828a-1d44a6cefb73.jpg)
@@ -78,6 +78,7 @@ app.mainloop()
 ## OPTIONS
   | Parameters  | Description |
   | -------- | ----------- |
+  | _master_ | set parent window (optional), the box will spawn at center of the parent window |
   | _width_ | width of the window in px (optional) |
   | _height_ | height of the window in px (optional) |
   | _fg_color_ | forground color of the messagebox [middle portion] |
@@ -92,14 +93,15 @@ app.mainloop()
   | _title_color_ | color of the title-text |
   | _button_text_color_ | color of the button-text |
   | _button_width_ | width of the buttons in px |
-  | _border_width_ | width of the border around the main frame [Default is 0] |
+  | _border_width_ | width of the border around the main frame [Default is 1] |
   | _border_color_ | color of the frame border |
   | _cancel_button_color_ | color of the **close** button, **set it to 'transparent' if you want to hide it** |
   | **_icon_** | icon that will be shown in the messagebox [Default is the 'info' icon] |
   | _icon_size_ | define the size of the icon image manually (tuple) |
   | _corner_radius_ | corner roundness of the messagebox window [**not applicable in linux**] |
   | _font_ | font of the messagebox text (tuple) |
-
+  | _header_ | add the original header back if you don't like **overrideredirect** (bool) |
+  
 ### Icons
 
 **Default icons:**
