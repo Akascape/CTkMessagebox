@@ -4,10 +4,10 @@
 ### Features:
 - Customize all elements inside the messagebox
 - Add custom icons or images
-- Spawns at center of the screen
-- Add multiple buttons according to your wish
+- Add multiple options according to your wish
 - No ugly looking header or borders
 - Comes with **5 default icons**
+- Spawns at center of the screen/app
 - Draggable window
 
 ## Installation
@@ -93,6 +93,7 @@ app.mainloop()
   | _title_color_ | color of the title-text |
   | _button_text_color_ | color of the button-text |
   | _button_width_ | width of the buttons in px |
+  | _button_height_ | height of the buttons in px |
   | _border_width_ | width of the border around the main frame [Default is 1] |
   | _border_color_ | color of the frame border |
   | _cancel_button_color_ | color of the **close** button, **set it to 'transparent' if you want to hide it** |
@@ -101,6 +102,7 @@ app.mainloop()
   | _corner_radius_ | corner roundness of the messagebox window [**not applicable in linux**] |
   | _font_ | font of the messagebox text (tuple) |
   | _header_ | add the original header back if you don't like **overrideredirect** (bool) |
+  | _topmost_ | disable the topmost window outside the app (bool) |
   
 ### Icons
 
