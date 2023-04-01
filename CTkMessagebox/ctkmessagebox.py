@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.5
+Version: 1.6
 """
 
 import customtkinter
@@ -28,12 +28,14 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  title_color: str = "default",
                  button_text_color: str = "default",
                  button_width: int = None,
+                 button_height: int = None,
                  cancel_button_color: str = "#c42b1c",
                  icon: str = "info",
                  icon_size: tuple = None,
                  corner_radius: int = 15,
                  font: tuple = None,
-                 header: bool = False):
+                 header: bool = False,
+                 topmost: bool = True):
         
         super().__init__()
 
@@ -53,8 +55,12 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.title(title)
         self.resizable(width=False, height=False)
         if not header: self.overrideredirect(1)
-        self.attributes("-topmost", True)
-        
+    
+        if topmost:
+            self.attributes("-topmost", True)
+        else:
+            self.transient(self.master_window)
+    
         if sys.platform.startswith("win"):
             self.transparent_color = '#000001'
             self.attributes("-transparentcolor", self.transparent_color)
@@ -64,12 +70,12 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         else:
             self.transparent_color = '#000001'
             corner_radius = 0
-            
+
+        self.lift()
         self.config(background=self.transparent_color)
         self.protocol("WM_DELETE_WINDOW", self.button_event)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)    
-        self.lift()
         self.x = self.winfo_x()
         self.y = self.winfo_y()
         self._title = title
@@ -77,9 +83,11 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.font = font
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
+        self.button_height = button_height if button_height else 28
+        if self.button_height>self.height/4: self.button_height = self.height/4 -20
         self.dot_color = cancel_button_color
         self.border_width = border_width if border_width<6 else 5
-        
+    
         if bg_color=="default":
             self.bg_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
         else:
@@ -90,10 +98,20 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         else:
             self.fg_color = fg_color
 
+        default_button_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        
         if button_color=="default":
-            self.button_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+            self.button_color = (default_button_color, default_button_color, default_button_color)
         else:
-            self.button_color = button_color
+            if type(button_color) is tuple:
+                if len(button_color)==2:                
+                    self.button_color = (button_color[0], button_color[1], default_button_color)
+                elif len(button_color)==1:
+                    self.button_color = (button_color[0], default_button_color, default_button_color)
+                else:
+                    self.button_color = button_color
+            else:
+                self.button_color = (button_color, button_color, button_color)
 
         if text_color=="default":
             self.text_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
@@ -130,45 +148,55 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.frame_top = customtkinter.CTkFrame(self, corner_radius=self.round_corners, width=self.width, border_width=self.border_width,
                                                 bg_color=self.transparent_color, fg_color=self.bg_color, border_color=self.border_color)
         self.frame_top.grid(sticky="nswe")
-        self.frame_top.grid_columnconfigure((0,1,2), weight=1)
-        self.frame_top.grid_rowconfigure((0,1,2), weight=1)
+
+        if button_width:
+            self.frame_top.grid_columnconfigure(0, weight=1)
+        else:
+            self.frame_top.grid_columnconfigure((1,2,3), weight=1)
+
+        if button_height:
+            self.frame_top.grid_rowconfigure((0,1,3), weight=1)
+        else:
+            self.frame_top.grid_rowconfigure((0,1,2), weight=1)
+            
         self.frame_top.bind("<B1-Motion>", self.move_window)
         self.frame_top.bind("<ButtonPress-1>", self.oldxyset)
         
         self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False,
                                            text="", fg_color=self.dot_color, command=self.button_event)
         self.button_close.configure(cursor="arrow")        
-        self.button_close.grid(row=0, column=2, sticky="ne", padx=10, pady=10)
+        self.button_close.grid(row=0, column=3, sticky="ne", padx=10, pady=10)
 
         self.title_label = customtkinter.CTkLabel(self.frame_top, width=1, text=self._title, text_color=self.title_color, font=self.font)
-        self.title_label.grid(row=0, column=0, columnspan=3, sticky="nw", padx=(15,30), pady=5)
+        self.title_label.grid(row=0, column=0, columnspan=4, sticky="nw", padx=(15,30), pady=5)
         self.title_label.bind("<B1-Motion>", self.move_window)
         self.title_label.bind("<ButtonPress-1>", self.oldxyset)
         
         self.info = customtkinter.CTkButton(self.frame_top,  width=1, height=100, corner_radius=0, text=self.message, font=self.font,
                                             fg_color=self.fg_color, hover=False, text_color=self.text_color, image=self.icon)
         self.info._text_label.configure(wraplength=self.width/2, justify="left")
-        self.info.grid(row=1, column=0, columnspan=3, sticky="nwes", padx=self.border_width)
+        self.info.grid(row=1, column=0, columnspan=4, sticky="nwes", padx=self.border_width)
         
         self.option_text_1 = option_1
-        self.button_1 = customtkinter.CTkButton(self.frame_top, text=self.option_text_1, fg_color=self.button_color,
+        self.button_1 = customtkinter.CTkButton(self.frame_top, text=self.option_text_1, fg_color=self.button_color[0],
                                                 width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                command=lambda: self.button_event(self.option_text_1))
-        self.button_1.grid(row=2, column=2, sticky="news", padx=(0,10), pady=10)
+                                                height=self.button_height, command=lambda: self.button_event(self.option_text_1))
+        
+        self.button_1.grid(row=2, column=3, sticky="news", padx=(0,10), pady=10)
 
         if option_2:
             self.option_text_2 = option_2      
-            self.button_2 = customtkinter.CTkButton(self.frame_top, text=self.option_text_2, fg_color=self.button_color,
+            self.button_2 = customtkinter.CTkButton(self.frame_top, text=self.option_text_2, fg_color=self.button_color[1],
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                    command=lambda: self.button_event(self.option_text_2))
-            self.button_2.grid(row=2, column=1, sticky="news", padx=10, pady=10)
+                                                    height=self.button_height, command=lambda: self.button_event(self.option_text_2))
+            self.button_2.grid(row=2, column=2, sticky="news", padx=10, pady=10)
             
         if option_3:
             self.option_text_3 = option_3
-            self.button_3 = customtkinter.CTkButton(self.frame_top, text=self.option_text_3, fg_color=self.button_color,
+            self.button_3 = customtkinter.CTkButton(self.frame_top, text=self.option_text_3, fg_color=self.button_color[2],
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                    command=lambda: self.button_event(self.option_text_3))
-            self.button_3.grid(row=2, column=0, sticky="news", padx=(10,0), pady=10)
+                                                    height=self.button_height, command=lambda: self.button_event(self.option_text_3))
+            self.button_3.grid(row=2, column=1, sticky="news", padx=(10,0), pady=10)
 
         if header:
             self.title_label.grid_forget()
