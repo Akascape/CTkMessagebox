@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.73
+Version: 1.74
 """
 
 import customtkinter
