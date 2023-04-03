@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.71
+Version: 1.72
 """
 
 import customtkinter
@@ -220,6 +220,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         try:
             for i in range(0,110,10):
                 self.attributes("-alpha", i/100)
+                self.update()
                 time.sleep(1/self.fade)
         except:
             pass
