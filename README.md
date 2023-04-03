@@ -9,6 +9,7 @@
 - Comes with **5 default icons**
 - Spawns at center of the screen/app
 - Draggable window
+- Fade-in/Fade-out animation
 
 ## Installation
 ```
@@ -103,6 +104,7 @@ app.mainloop()
   | _font_ | font of the messagebox text (tuple) |
   | _header_ | add the original header back if you don't like **overrideredirect** (bool) |
   | _topmost_ | disable the topmost window outside the app (bool) |
+  | **_fade_** | enable a fade-in and fade-out animation (bool, default is False) |
   
 ### Icons
 
