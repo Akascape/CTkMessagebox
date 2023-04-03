@@ -1,12 +1,15 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.6
+Version: 1.7
 """
 
 import customtkinter
 from PIL import Image
-import os, sys
+import os
+import sys
+import time
+import threading
 
 class CTkMessagebox(customtkinter.CTkToplevel):
     
@@ -35,7 +38,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  corner_radius: int = 15,
                  font: tuple = None,
                  header: bool = False,
-                 topmost: bool = True):
+                 topmost: bool = True,
+                 fade: bool = False):
         
         super().__init__()
 
@@ -84,6 +88,12 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
         self.button_height = button_height if button_height else 28
+        self.fade = fade
+        
+        if self.fade:
+            self.attributes("-alpha", 0)
+            threading.Thread(target=self.fade_in).start()
+            
         if self.button_height>self.height/4: self.button_height = self.height/4 -20
         self.dot_color = cancel_button_color
         self.border_width = border_width if border_width<6 else 5
@@ -204,7 +214,20 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.frame_top.configure(corner_radius=0)
             
         self.grab_set()
+
+    def fade_in(self):
+        try:
+            for i in range(0,110,10):
+                self.attributes("-alpha", i/100)
+                time.sleep(1/1000)
+        except:
+            pass
             
+    def fade_out(self):   
+        for i in range(100,0,-10):
+            self.attributes("-alpha", i/100)
+            time.sleep(1/1000)
+        
     def get(self):
         self.master.wait_window(self)
         return self.event
@@ -220,9 +243,11 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         
     def button_event(self, event=None):
         self.grab_release()
+        if self.fade:
+            self.fade_out()
         self.destroy()
         self.event = event
-    
+            
 if __name__ == "__main__":
     app = CTkMessagebox()
     app.mainloop()
