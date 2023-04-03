@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.72
+Version: 1.73
 """
 
 import customtkinter
@@ -9,7 +9,6 @@ from PIL import Image
 import os
 import sys
 import time
-import threading
 
 class CTkMessagebox(customtkinter.CTkToplevel):
     
@@ -46,7 +45,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.master_window = master
         self.width = 250 if width<250 else width
         self.height = 150 if height<150 else  height
-        
+            
         if self.master_window is None:
             self.spawn_x = int((self.winfo_screenwidth()-self.width)/2)
             self.spawn_y = int((self.winfo_screenheight()-self.height)/2)
@@ -58,7 +57,14 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.geometry(f"{self.width}x{self.height}+{self.spawn_x}+{self.spawn_y}")
         self.title(title)
         self.resizable(width=False, height=False)
-        if not header: self.overrideredirect(1)
+        self.fade = fade_in_duration
+        
+        if self.fade:
+            self.fade = 20 if self.fade<20 else self.fade
+            self.attributes("-alpha", 0)
+            
+        if not header:
+            self.overrideredirect(1)
     
         if topmost:
             self.attributes("-topmost", True)
@@ -88,12 +94,6 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
         self.button_height = button_height if button_height else 28
-        self.fade = fade_in_duration
-        
-        if self.fade:
-            if self.fade<=10: self.fade=10
-            self.attributes("-alpha", 0)
-            threading.Thread(target=self.fade_in).start()
             
         if self.button_height>self.height/4: self.button_height = self.height/4 -20
         self.dot_color = cancel_button_color
@@ -213,26 +213,32 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.title_label.grid_forget()
             self.button_close.grid_forget()
             self.frame_top.configure(corner_radius=0)
-            
-        self.grab_set()
 
-    def fade_in(self):
-        try:
-            for i in range(0,110,10):
-                self.attributes("-alpha", i/100)
-                self.update()
-                time.sleep(1/self.fade)
-        except:
-            pass
+        if self.winfo_exists():
+            self.grab_set()
             
-    def fade_out(self):   
-        for i in range(100,0,-10):
+        if self.fade:
+            self.fade_in()
+        
+    def fade_in(self):
+        for i in range(0,110,10):
+            if not self.winfo_exists():
+                break
             self.attributes("-alpha", i/100)
             self.update()
             time.sleep(1/self.fade)
-        
+            
+    def fade_out(self):
+        for i in range(100,0,-10):
+            if not self.winfo_exists():
+                break
+            self.attributes("-alpha", i/100)
+            self.update()
+            time.sleep(1/self.fade)
+
     def get(self):
-        self.master.wait_window(self)
+        if self.winfo_exists():
+            self.master.wait_window(self)
         return self.event
         
     def oldxyset(self, event):
@@ -245,12 +251,19 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.geometry(f'+{self.x}+{self.y}')
         
     def button_event(self, event=None):
-        self.grab_release()
+        try:
+            self.button_1.configure(state="disabled")
+            self.button_2.configure(state="disabled")
+            self.button_3.configure(state="disabled")
+        except AttributeError:
+            pass
+
         if self.fade:
             self.fade_out()
+        self.grab_release()
         self.destroy()
         self.event = event
-            
+        
 if __name__ == "__main__":
     app = CTkMessagebox()
     app.mainloop()
