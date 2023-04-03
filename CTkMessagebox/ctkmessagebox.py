@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.7
+Version: 1.71
 """
 
 import customtkinter
@@ -39,7 +39,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  font: tuple = None,
                  header: bool = False,
                  topmost: bool = True,
-                 fade: bool = False):
+                 fade_in_duration: int = 0):
         
         super().__init__()
 
@@ -88,9 +88,10 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
         self.button_height = button_height if button_height else 28
-        self.fade = fade
+        self.fade = fade_in_duration
         
         if self.fade:
+            if self.fade<=10: self.fade=10
             self.attributes("-alpha", 0)
             threading.Thread(target=self.fade_in).start()
             
@@ -219,14 +220,15 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         try:
             for i in range(0,110,10):
                 self.attributes("-alpha", i/100)
-                time.sleep(1/1000)
+                time.sleep(1/self.fade)
         except:
             pass
             
     def fade_out(self):   
         for i in range(100,0,-10):
             self.attributes("-alpha", i/100)
-            time.sleep(1/1000)
+            self.update()
+            time.sleep(1/self.fade)
         
     def get(self):
         self.master.wait_window(self)
