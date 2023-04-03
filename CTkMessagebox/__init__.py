@@ -5,7 +5,7 @@ This is a modern messagebox made with customtkinter.
 Homepage: https://github.com/Akascape/CTkMessagebox
 """
 
-__version__ = '1.72'
+__version__ = '1.73'
 
 from .ctkmessagebox import CTkMessagebox
 
