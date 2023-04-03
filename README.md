@@ -104,7 +104,7 @@ app.mainloop()
   | _font_ | font of the messagebox text (tuple) |
   | _header_ | add the original header back if you don't like **overrideredirect** (bool) |
   | _topmost_ | disable the topmost window outside the app (bool) |
-  | **_fade_** | enable a fade-in and fade-out animation (bool, default is False) |
+  | **_fade_in_duration_** | enable a fade-in and fade-out animation (int, default is 0)  |
   
 ### Icons
 
