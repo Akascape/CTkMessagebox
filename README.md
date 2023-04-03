@@ -9,7 +9,7 @@
 - Comes with **5 default icons**
 - Spawns at center of the screen/app
 - Draggable window
-- Fade-in/Fade-out animation
+- Fade-in/Fade-out window effect
 
 ## Installation
 ```
