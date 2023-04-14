@@ -93,6 +93,7 @@ app.mainloop()
   | _text_color_ | color of the message-text |
   | _title_color_ | color of the title-text |
   | _button_text_color_ | color of the button-text |
+  | _button_hover_color_ | color of the button-hover |
   | _button_width_ | width of the buttons in px |
   | _button_height_ | height of the buttons in px |
   | _border_width_ | width of the border around the main frame [Default is 1] |
