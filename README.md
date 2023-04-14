@@ -113,7 +113,7 @@ app.mainloop()
 
 ![icons](https://user-images.githubusercontent.com/89206401/221258403-aafea575-856e-4f4e-b3af-f995785c9879.png)
 
-(*These icons are created by me using Paint.NET, free to use!*)
+(*These icons are created using Paint.NET, free to use!*)
 
 **For custom images, just use `icon="path_to_the_image.png"`**
 
