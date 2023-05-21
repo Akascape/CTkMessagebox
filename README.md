@@ -91,6 +91,7 @@ app.mainloop()
   | **_option_1_** | the text on the first button [Default is 'OK'] |
   | **_option_2_** | the text on the second button |
   | **_option_3_** | the text on the last button |
+  | _options_ | directly pass a list containing the options in order |
   | _button_color_ | color of the buttons |
   | _text_color_ | color of the message-text |
   | _title_color_ | color of the title-text |
@@ -100,6 +101,7 @@ app.mainloop()
   | _button_height_ | height of the buttons in px |
   | _border_width_ | width of the border around the main frame [Default is 1] |
   | _border_color_ | color of the frame border |
+  | _cancel_button_ | define the cancel button type: **circle, cross or None** |
   | _cancel_button_color_ | color of the **close** button, **set it to 'transparent' if you want to hide it** |
   | **_icon_** | icon that will be shown in the messagebox [Default is the 'info' icon] |
   | _icon_size_ | define the size of the icon image manually (tuple) |
