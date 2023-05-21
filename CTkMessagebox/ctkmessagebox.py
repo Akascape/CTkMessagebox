@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 1.8
+Version: 2.0
 """
 
 import customtkinter
@@ -21,6 +21,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  option_1: str = "OK",
                  option_2: str = None,
                  option_3: str = None,
+                 options: list = [],
                  border_width: int = 1,
                  border_color: str = "default",
                  button_color: str = "default",
@@ -100,7 +101,14 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         if self.button_height>self.height/4: self.button_height = self.height/4 -20
         self.dot_color = cancel_button_color
         self.border_width = border_width if border_width<6 else 5
-    
+        
+        if type(options) is list and len(options)>0:
+            try:
+                option_1 = options[-1]
+                option_2 = options[-2]
+                option_3 = options[-3]
+            except IndexError: None
+            
         if bg_color=="default":
             self.bg_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
         else:
