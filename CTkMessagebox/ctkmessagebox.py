@@ -32,7 +32,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  button_text_color: str = "default",
                  button_width: int = None,
                  button_height: int = None,
-                 cancel_button_color: str = "#c42b1c",
+                 cancel_button_color: str = None,
+                 cancel_button: str = "circle", # types: circle, cross or none
                  button_hover_color: str = "default",
                  icon: str = "info",
                  icon_size: tuple = None,
@@ -93,6 +94,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self._title = title
         self.message = message
         self.font = font
+        self.cancel_button = cancel_button
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
         self.button_height = button_height if button_height else 28
@@ -187,12 +189,19 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             
         self.frame_top.bind("<B1-Motion>", self.move_window)
         self.frame_top.bind("<ButtonPress-1>", self.oldxyset)
-        
-        self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False,
-                                           text="", fg_color=self.dot_color, command=self.button_event)
-        self.button_close.configure(cursor="arrow")        
-        self.button_close.grid(row=0, column=3, sticky="ne", padx=10, pady=10)
 
+        if self.cancel_button=="cross":
+            self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=0, height=0, hover=False,
+                                                        text_color=self.dot_color if self.dot_color else self.title_color,
+                                                        text="✕", fg_color="transparent", command=self.button_event)
+            self.button_close.grid(row=0, column=3, sticky="ne", padx=5+self.border_width, pady=5+self.border_width)
+            self.button_close.configure(cursor="arrow")
+        elif self.cancel_button=="circle":
+            self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False,
+                                                        text="", fg_color=self.dot_color if self.dot_color else "#c42b1c", command=self.button_event)     
+            self.button_close.grid(row=0, column=3, sticky="ne", padx=10, pady=10)       
+            self.button_close.configure(cursor="arrow")
+            
         self.title_label = customtkinter.CTkLabel(self.frame_top, width=1, text=self._title, text_color=self.title_color, font=self.font)
         self.title_label.grid(row=0, column=0, columnspan=4, sticky="nw", padx=(15,30), pady=5)
         self.title_label.bind("<B1-Motion>", self.move_window)
