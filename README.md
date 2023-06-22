@@ -1,5 +1,5 @@
 # CTkMessagebox
-**A modern and fully customizable messagebox for [customtkinter](https://github.com/TomSchimansky/CustomTkinter)**, a must have extension pack!
+**A modern and fully customizable messagebox for [customtkinter](https://github.com/TomSchimansky/CustomTkinter)**, a must-have extension pack!
 ![3d](https://github.com/Akascape/CTkMessagebox/assets/89206401/cce577fc-6426-4c09-96f9-ede88caf7784)
 
 ### Features:
