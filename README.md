@@ -1,9 +1,25 @@
-# CTkMessagebox
-**A modern and fully customizable messagebox for [customtkinter](https://github.com/TomSchimansky/CustomTkinter)**, a must-have extension pack!
+<h1 align="center">CTkMessagebox</h1>
+
+<h3 align="center">A modern and fully customizable messagebox for CustomTkinter, A must-have extension pack!</h3>
+
+<div align="center">
+    
+  <a href="https://creativecommons.org/publicdomain/zero/1.0/">![License](https://img.shields.io/badge/License-CC0_1.0-yellow)</a>
+  <a href="https://github.com/Akascape/CTkMessagebox/archive/refs/heads/main.zip">![Download](https://img.shields.io/badge/Source_Code-Download-blue)</a>
+
+</div>
+
+
+<div align="center">
 
 ![3d](https://github.com/Akascape/CTkMessagebox/assets/89206401/cce577fc-6426-4c09-96f9-ede88caf7784)
 
-### Features:
+</div>
+
+<br>
+
+<h2 align="center"> Features </h2>
+
 - Customize all elements inside the messagebox
 - Add custom icons or images
 - Add multiple options according to your wish
@@ -13,7 +29,12 @@
 - Draggable window
 - Fade-in/Fade-out window effect
 
-## Installation
+<br>
+
+<h2 align="center"> Installation </h2>
+
+<div align="center">
+
 ```
 pip install CTkMessagebox
 ```
@@ -24,10 +45,24 @@ pip install CTkMessagebox
 [![Downloads](https://static.pepy.tech/badge/ctkmessagebox)](https://pepy.tech/project/ctkmessagebox)
 ![Platform](https://img.shields.io/powershellgallery/p/Pester?color=blue)
 
-## How it looks?
+</div>
+
+<br>
+
+<h2 align="center"> How it looks? </h2>
+
+<div align="center">
+
 ![Screenshot](https://user-images.githubusercontent.com/89206401/221258593-75058878-b598-40c3-828a-1d44a6cefb73.jpg)
 
-## Example
+</div>
+
+<br>
+
+<h2 align="center"> Example </h2>
+
+<div align="center">
+
 ```python
 from CTkMessagebox import CTkMessagebox
 import customtkinter
@@ -80,7 +115,14 @@ app.mainloop()
 
 ```
 
-## OPTIONS
+</div>
+
+<br>
+
+<h2 align="center"> OPTIONS </h2>
+
+<div align="center">
+
   | Parameters  | Description |
   | -------- | ----------- |
   | _master_ | set parent window (optional), the box will spawn at center of the parent window |
@@ -112,8 +154,14 @@ app.mainloop()
   | _header_ | add the original header back if you don't like **overrideredirect** (bool) |
   | _topmost_ | disable the topmost window outside the app (bool) |
   | **_fade_in_duration_** | enable a fade-in and fade-out animation (int, default is 0)  |
-  
-### Icons
+
+</div>
+
+<br>
+
+<h2 align="center"> Icons </h2>
+
+<div align="center">
 
 **Default icons:**
 
@@ -124,3 +172,5 @@ app.mainloop()
 **For custom images, just use `icon="path_to_the_image.png"`**
 
 ## That's all, hope it will help in UI development!
+
+</div>
