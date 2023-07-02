@@ -61,8 +61,6 @@ pip install CTkMessagebox
 
 <h2 align="center"> Example </h2>
 
-<div align="center">
-
 ```python
 from CTkMessagebox import CTkMessagebox
 import customtkinter
@@ -114,8 +112,6 @@ customtkinter.CTkButton(app, text="Ask Question", command=ask_question).grid(pad
 app.mainloop()
 
 ```
-
-</div>
 
 <br>
 
