@@ -4,9 +4,11 @@
 
 <div align="center">
     
-  <a href="https://creativecommons.org/publicdomain/zero/1.0/">![License](https://img.shields.io/badge/License-CC0_1.0-yellow)</a>
+  <a href="https://creativecommons.org/publicdomain/zero/1.0/">![License](https://img.shields.io/badge/License-CC0_1.0-blue)</a>
   <a href="https://github.com/Akascape/CTkMessagebox/archive/refs/heads/main.zip">![Download](https://img.shields.io/badge/Source_Code-Download-blue)</a>
-
+  [![PyPI](https://img.shields.io/pypi/v/CTkMessagebox?style=flat)](https://pypi.org/project/CTkMessagebox)
+  [![Downloads](https://static.pepy.tech/badge/ctkmessagebox)](https://pepy.tech/project/ctkmessagebox)
+  ![Platform](https://img.shields.io/powershellgallery/p/Pester?color=blue)
 </div>
 
 
@@ -41,9 +43,6 @@ pip install CTkMessagebox
 
 [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkMessagebox?&color=green&label=Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="300">](https://github.com/Akascape/CTkMessagebox/archive/refs/heads/main.zip)
 
-[![PyPI](https://img.shields.io/pypi/v/CTkMessagebox?style=flat)](https://pypi.org/project/CTkMessagebox)
-[![Downloads](https://static.pepy.tech/badge/ctkmessagebox)](https://pepy.tech/project/ctkmessagebox)
-![Platform](https://img.shields.io/powershellgallery/p/Pester?color=blue)
 
 </div>
 
