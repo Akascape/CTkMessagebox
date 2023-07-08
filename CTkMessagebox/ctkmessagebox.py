@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 2.0
+Version: 2.1
 """
 
 import customtkinter
@@ -33,7 +33,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  button_width: int = None,
                  button_height: int = None,
                  cancel_button_color: str = None,
-                 cancel_button: str = "circle", # types: circle, cross or none
+                 cancel_button: str = None, # types: circle, cross or none
                  button_hover_color: str = "default",
                  icon: str = "info",
                  icon_size: tuple = None,
@@ -75,14 +75,17 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.transient(self.master_window)
     
         if sys.platform.startswith("win"):
-            self.transparent_color = self._apply_appearance_mode(self._fg_color)
+            self.transparent_color = self._apply_appearance_mode(self.cget("fg_color"))
             self.attributes("-transparentcolor", self.transparent_color)
+            default_cancel_button = "cross"
         elif sys.platform.startswith("darwin"):
             self.transparent_color = 'systemTransparent'
             self.attributes("-transparent", True)
+            default_cancel_button = "circle"
         else:
             self.transparent_color = '#000001'
             corner_radius = 0
+            default_cancel_button = "cross"
 
         self.lift()
         self.config(background=self.transparent_color)
@@ -94,7 +97,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self._title = title
         self.message = message
         self.font = font
-        self.cancel_button = cancel_button
+        
+        self.cancel_button = cancel_button if cancel_button else default_cancel_button      
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
         self.button_height = button_height if button_height else 28
@@ -120,9 +124,15 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.fg_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["top_fg_color"])
         else:
             self.fg_color = fg_color
-
+            
         default_button_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
-        
+
+        if sys.platform.startswith("win"):
+            if self.bg_color==self.transparent_color or self.fg_color==self.transparent_color:
+                self.configure(fg_color="#000001")
+                self.transparent_color = "#000001"
+                self.attributes("-transparentcolor", self.transparent_color)
+
         if button_color=="default":
             self.button_color = (default_button_color, default_button_color, default_button_color)
         else:
@@ -191,16 +201,14 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.frame_top.bind("<ButtonPress-1>", self.oldxyset)
 
         if self.cancel_button=="cross":
-            self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=0, height=0, hover=False,
+            self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=0, height=0, hover=False, border_width=0,
                                                         text_color=self.dot_color if self.dot_color else self.title_color,
                                                         text="✕", fg_color="transparent", command=self.button_event)
             self.button_close.grid(row=0, column=3, sticky="ne", padx=5+self.border_width, pady=5+self.border_width)
-            self.button_close.configure(cursor="arrow")
         elif self.cancel_button=="circle":
-            self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False,
+            self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False, border_width=0,
                                                         text="", fg_color=self.dot_color if self.dot_color else "#c42b1c", command=self.button_event)     
             self.button_close.grid(row=0, column=3, sticky="ne", padx=10, pady=10)       
-            self.button_close.configure(cursor="arrow")
             
         self.title_label = customtkinter.CTkLabel(self.frame_top, width=1, text=self._title, text_color=self.title_color, font=self.font)
         self.title_label.grid(row=0, column=0, columnspan=4, sticky="nw", padx=(15,30), pady=5)
