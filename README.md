@@ -164,7 +164,7 @@ app.mainloop()
 
 (*These icons are created using Paint.NET, free to use!*)
 
-**For custom images, just use `icon="path_to_the_image.png"`**
+**For custom images, just use `icon="image_path.png"`**
 
 ## That's all, hope it will help in UI development!
 
