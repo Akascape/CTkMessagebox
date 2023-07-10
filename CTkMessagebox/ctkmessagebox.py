@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 2.1
+Version: 2.2
 """
 
 import customtkinter
@@ -11,7 +11,14 @@ import sys
 import time
 
 class CTkMessagebox(customtkinter.CTkToplevel):
-    
+    ICONS = {
+        "check": None,
+        "cancel": None,
+        "info": None,
+        "question": None,
+        "warning": None
+    }
+
     def __init__(self,
                  master: any = None,
                  width: int = 400,
@@ -177,12 +184,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         else:
             self.size = (self.height/4, self.height/4)
         
-        if icon in ["check", "cancel", "info", "question", "warning"]:
-            self.icon = customtkinter.CTkImage(Image.open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'icons', icon+'.png')),
-                                               size=self.size)
-        else:
-            self.icon = customtkinter.CTkImage(Image.open(icon), size=self.size) if icon else None
-
+        self.icon = self.load_icon(icon, icon_size) if icon else None
         self.frame_top = customtkinter.CTkFrame(self, corner_radius=self.round_corners, width=self.width, border_width=self.border_width,
                                                 bg_color=self.transparent_color, fg_color=self.bg_color, border_color=self.border_color)
         self.frame_top.grid(sticky="nswe")
@@ -258,6 +260,20 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             
         if self.fade:
             self.fade_in()
+            
+    def load_icon(self, icon, icon_size):
+        if icon not in self.ICONS or self.ICONS[icon] is None:
+            if icon in ["check", "cancel", "info", "question", "warning"]:
+                image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'icons', icon + '.png')
+            else:
+                image_path = icon
+            if icon_size:
+                size_height = icon_size[1] if icon_size[1] <= self.height - 100 else self.height - 100
+                size = (icon_size[0], size_height)
+            else:
+                size = (self.height / 4, self.height / 4)
+            self.ICONS[icon] = customtkinter.CTkImage(Image.open(image_path), size=size)
+        return self.ICONS[icon]
         
     def fade_in(self):
         for i in range(0,110,10):
@@ -301,8 +317,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.fade_out()
         self.grab_release()
         self.destroy()
-        self.event = event
-
+        self.event = event  
+        
 if __name__ == "__main__":
     app = CTkMessagebox()
     app.mainloop()
