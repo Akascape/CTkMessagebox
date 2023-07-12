@@ -9,6 +9,7 @@ from PIL import Image
 import os
 import sys
 import time
+from typing import Literal
 
 class CTkMessagebox(customtkinter.CTkToplevel):
     ICONS = {
@@ -48,7 +49,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  font: tuple = None,
                  header: bool = False,
                  topmost: bool = True,
-                 fade_in_duration: int = 0):
+                 fade_in_duration: int = 0,
+                 option_focus: Literal[1, 2, 3] = None):
         
         super().__init__()
 
@@ -260,6 +262,13 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             
         if self.fade:
             self.fade_in()
+
+        if option_focus:
+            selected_button = getattr(self, "button_"+str(option_focus))
+            selected_button.focus()
+            selected_button.configure(border_color=self.bt_hv_color, border_width=2)
+            selected_option = getattr(self, "option_text_"+str(option_focus))
+            selected_button.bind("<Return>", lambda event: self.button_event(selected_option))
             
     def load_icon(self, icon, icon_size):
         if icon not in self.ICONS or self.ICONS[icon] is None:
