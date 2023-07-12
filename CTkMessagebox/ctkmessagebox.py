@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 2.2
+Version: 2.3
 """
 
 import customtkinter
@@ -9,6 +9,7 @@ from PIL import Image
 import os
 import sys
 import time
+from typing import Literal
 
 class CTkMessagebox(customtkinter.CTkToplevel):
     ICONS = {
@@ -48,11 +49,14 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  font: tuple = None,
                  header: bool = False,
                  topmost: bool = True,
-                 fade_in_duration: int = 0):
+                 fade_in_duration: int = 0,
+                 option_focus: Literal[1, 2, 3] = None):
         
         super().__init__()
-
+        
+        
         self.master_window = master
+     
         self.width = 250 if width<250 else width
         self.height = 150 if height<150 else  height
             
@@ -72,7 +76,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         if self.fade:
             self.fade = 20 if self.fade<20 else self.fade
             self.attributes("-alpha", 0)
-            
+        
         if not header:
             self.overrideredirect(1)
     
@@ -95,6 +99,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             default_cancel_button = "cross"
 
         self.lift()
+        
         self.config(background=self.transparent_color)
         self.protocol("WM_DELETE_WINDOW", self.button_event)
         self.grid_columnconfigure(0, weight=1)
@@ -234,16 +239,16 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         
         self.button_1.grid(row=2, column=3, sticky="news", padx=(0,10), pady=10)
 
-        if option_2:
-            self.option_text_2 = option_2      
+        self.option_text_2 = option_2 
+        if option_2:     
             self.button_2 = customtkinter.CTkButton(self.frame_top, text=self.option_text_2, fg_color=self.button_color[1],
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
                                                     hover_color=self.bt_hv_color, height=self.button_height,
                                                     command=lambda: self.button_event(self.option_text_2))
             self.button_2.grid(row=2, column=2, sticky="news", padx=10, pady=10)
-            
+
+        self.option_text_3 = option_3
         if option_3:
-            self.option_text_3 = option_3
             self.button_3 = customtkinter.CTkButton(self.frame_top, text=self.option_text_3, fg_color=self.button_color[2],
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
                                                     hover_color=self.bt_hv_color, height=self.button_height,
@@ -261,6 +266,61 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         if self.fade:
             self.fade_in()
             
+        if option_focus:
+            self.option_focus = option_focus
+            self.focus_button(self.option_focus)
+        else:
+            if not self.option_text_2 and not self.option_text_3:
+                self.button_1.focus()
+                self.button_1.bind("<Return>", lambda event: self.button_event(self.option_text_1))
+ 
+        self.bind("<Escape>", lambda e: self.button_event())
+        
+    def focus_button(self, option_focus):
+        try:
+            self.selected_button = getattr(self, "button_"+str(option_focus))
+            self.selected_button.focus()
+            self.selected_button.configure(border_color=self.bt_hv_color, border_width=3)
+            self.selected_option = getattr(self, "option_text_"+str(option_focus))
+            self.selected_button.bind("<Return>", lambda event: self.button_event(self.selected_option))
+        except AttributeError:
+            return
+        
+        self.bind("<Left>", lambda e: self.change_left())
+        self.bind("<Right>", lambda e: self.change_right())
+        
+    def change_left(self):
+        if self.option_focus==3:
+            return
+        
+        self.selected_button.unbind("<Return>")
+        self.selected_button.configure(border_width=0)
+    
+        if self.option_focus==1:
+            if self.option_text_2:
+                self.option_focus = 2
+        
+        elif self.option_focus==2:
+            if self.option_text_3:
+                self.option_focus = 3
+  
+        self.focus_button(self.option_focus)
+        
+    def change_right(self):
+        if self.option_focus==1:
+            return
+        
+        self.selected_button.unbind("<Return>")
+        self.selected_button.configure(border_width=0)
+
+        if self.option_focus==2:
+            self.option_focus = 1
+
+        elif self.option_focus==3:
+            self.option_focus = 2
+                
+        self.focus_button(self.option_focus)
+    
     def load_icon(self, icon, icon_size):
         if icon not in self.ICONS or self.ICONS[icon] is None:
             if icon in ["check", "cancel", "info", "question", "warning"]:
