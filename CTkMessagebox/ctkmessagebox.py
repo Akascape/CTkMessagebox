@@ -1,11 +1,11 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 2.3
+Version: 2.4
 """
 
 import customtkinter
-from PIL import Image
+from PIL import Image, ImageTk
 import os
 import sys
 import time
@@ -19,7 +19,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         "question": None,
         "warning": None
     }
-
+    ICON_BITMAP = {}
     def __init__(self,
                  master: any = None,
                  width: int = 400,
@@ -46,6 +46,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  icon: str = "info",
                  icon_size: tuple = None,
                  corner_radius: int = 15,
+                 justify: str = "right",
                  font: tuple = None,
                  header: bool = False,
                  topmost: bool = True,
@@ -79,7 +80,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         
         if not header:
             self.overrideredirect(1)
-    
+            
         if topmost:
             self.attributes("-topmost", True)
         else:
@@ -109,7 +110,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self._title = title
         self.message = message
         self.font = font
-        
+        self.justify = justify
         self.cancel_button = cancel_button if cancel_button else default_cancel_button      
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
@@ -190,6 +191,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.size = (self.height/4, self.height/4)
         
         self.icon = self.load_icon(icon, icon_size) if icon else None
+        
         self.frame_top = customtkinter.CTkFrame(self, corner_radius=self.round_corners, width=self.width, border_width=self.border_width,
                                                 bg_color=self.transparent_color, fg_color=self.bg_color, border_color=self.border_color)
         self.frame_top.grid(sticky="nswe")
@@ -210,34 +212,35 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         if self.cancel_button=="cross":
             self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=0, height=0, hover=False, border_width=0,
                                                         text_color=self.dot_color if self.dot_color else self.title_color,
-                                                        text="✕", fg_color="transparent", command=self.button_event)
-            self.button_close.grid(row=0, column=3, sticky="ne", padx=5+self.border_width, pady=5+self.border_width)
+                                                      text="✕", fg_color="transparent", command=self.button_event)
+            self.button_close.grid(row=0, column=5, sticky="ne", padx=5+self.border_width, pady=5+self.border_width)
         elif self.cancel_button=="circle":
             self.button_close = customtkinter.CTkButton(self.frame_top, corner_radius=10, width=10, height=10, hover=False, border_width=0,
                                                         text="", fg_color=self.dot_color if self.dot_color else "#c42b1c", command=self.button_event)     
-            self.button_close.grid(row=0, column=3, sticky="ne", padx=10, pady=10)       
+            self.button_close.grid(row=0, column=5, sticky="ne", padx=10, pady=10)       
             
         self.title_label = customtkinter.CTkLabel(self.frame_top, width=1, text=self._title, text_color=self.title_color, font=self.font)
-        self.title_label.grid(row=0, column=0, columnspan=4, sticky="nw", padx=(15,30), pady=5)
+        self.title_label.grid(row=0, column=0, columnspan=6, sticky="nw", padx=(15,30), pady=5)
         self.title_label.bind("<B1-Motion>", self.move_window)
         self.title_label.bind("<ButtonPress-1>", self.oldxyset)
         
         self.info = customtkinter.CTkButton(self.frame_top,  width=1, height=self.height/2, corner_radius=0, text=self.message, font=self.font,
                                             fg_color=self.fg_color, hover=False, text_color=self.text_color, image=self.icon)
         self.info._text_label.configure(wraplength=self.width/2, justify="left")
-        self.info.grid(row=1, column=0, columnspan=4, sticky="nwes", padx=self.border_width)
+        self.info.grid(row=1, column=0, columnspan=6, sticky="nwes", padx=self.border_width)
         
         if self.info._text_label.winfo_reqheight()>self.height/2:
             height_offset = int((self.info._text_label.winfo_reqheight())-(self.height/2) + self.height)
             self.geometry(f"{self.width}x{height_offset}")
-            
+
+
         self.option_text_1 = option_1
+        
         self.button_1 = customtkinter.CTkButton(self.frame_top, text=self.option_text_1, fg_color=self.button_color[0],
                                                 width=self.button_width, font=self.font, text_color=self.bt_text_color,
                                                 hover_color=self.bt_hv_color, height=self.button_height,
                                                 command=lambda: self.button_event(self.option_text_1))
         
-        self.button_1.grid(row=2, column=3, sticky="news", padx=(0,10), pady=10)
 
         self.option_text_2 = option_2 
         if option_2:     
@@ -245,7 +248,6 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
                                                     hover_color=self.bt_hv_color, height=self.button_height,
                                                     command=lambda: self.button_event(self.option_text_2))
-            self.button_2.grid(row=2, column=2, sticky="news", padx=10, pady=10)
 
         self.option_text_3 = option_3
         if option_3:
@@ -253,11 +255,43 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
                                                     hover_color=self.bt_hv_color, height=self.button_height,
                                                     command=lambda: self.button_event(self.option_text_3))
-            self.button_3.grid(row=2, column=1, sticky="news", padx=(10,0), pady=10)
-
+            
+        if self.justify=="center":
+            if option_3:
+                self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
+                columns = [4,2,0]
+                self.button_1.grid(row=2, column=columns[0], columnspan=2, sticky="news", padx=(0,10), pady=10) 
+                self.button_2.grid(row=2, column=columns[1], columnspan=2, sticky="news", padx=10, pady=10)
+                self.button_3.grid(row=2, column=columns[2], columnspan=2, sticky="news", padx=(10,0), pady=10)
+            elif option_2:
+                self.frame_top.columnconfigure((0,5), weight=1)
+                columns = [2,3]
+                self.button_1.grid(row=2, column=columns[0], sticky="news", padx=(0,5), pady=10)
+                self.button_2.grid(row=2, column=columns[1], sticky="news", padx=(5,0), pady=10)
+            else:
+                self.frame_top.columnconfigure((0,2,4), weight=2)
+                self.button_1.grid(row=2, column=2, columnspan=2, sticky="news", padx=(0,10), pady=10)   
+        elif self.justify=="left":
+            self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
+            columns = [0,2,4]
+            self.button_1.grid(row=2, column=columns[0], columnspan=2, sticky="news", padx=(10,0), pady=10)
+            if option_2:  
+                self.button_2.grid(row=2, column=columns[1], columnspan=2, sticky="news", padx=10, pady=10)
+            if option_3:
+                self.button_3.grid(row=2, column=columns[2], columnspan=2, sticky="news", padx=(0,10), pady=10)
+        else:
+            self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
+            columns = [4,2,0]
+            self.button_1.grid(row=2, column=columns[0], columnspan=2, sticky="news", padx=(0,10), pady=10)
+            if option_2:  
+                self.button_2.grid(row=2, column=columns[1], columnspan=2, sticky="news", padx=10, pady=10)
+            if option_3:
+                self.button_3.grid(row=2, column=columns[2], columnspan=2, sticky="news", padx=(10,0), pady=10)
+                        
         if header:
-            self.title_label.grid_forget()
-            self.button_close.grid_forget()
+            self.title_label.configure(text="")
+            self.title_label.grid_configure(pady=0)
+            self.button_close.configure(text_color=self.bg_color)
             self.frame_top.configure(corner_radius=0)
 
         if self.winfo_exists():
@@ -333,6 +367,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             else:
                 size = (self.height / 4, self.height / 4)
             self.ICONS[icon] = customtkinter.CTkImage(Image.open(image_path), size=size)
+            self.ICON_BITMAP[icon] = ImageTk.PhotoImage(file=image_path)
+        self.after(200, lambda: self.iconphoto(False, self.ICON_BITMAP[icon]))
         return self.ICONS[icon]
         
     def fade_in(self):
