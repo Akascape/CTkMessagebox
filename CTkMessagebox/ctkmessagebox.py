@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 2.4
+Version: 2.5
 """
 
 import customtkinter
@@ -51,6 +51,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  header: bool = False,
                  topmost: bool = True,
                  fade_in_duration: int = 0,
+                 sound: bool = False,
                  option_focus: Literal[1, 2, 3] = None):
         
         super().__init__()
@@ -111,10 +112,12 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         self.message = message
         self.font = font
         self.justify = justify
+        self.sound = sound
         self.cancel_button = cancel_button if cancel_button else default_cancel_button      
         self.round_corners = corner_radius if corner_radius<=30 else 30
         self.button_width = button_width if button_width else self.width/4
         self.button_height = button_height if button_height else 28
+  
         if self.fade: self.attributes("-alpha", 0)
         
         if self.button_height>self.height/4: self.button_height = self.height/4 -20
@@ -257,36 +260,58 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                                                     command=lambda: self.button_event(self.option_text_3))
             
         if self.justify=="center":
+            if button_width:
+                columns = [4,3,2]
+                span = 1
+            else:
+                columns = [4,2,0]
+                span = 2
             if option_3:
                 self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
-                columns = [4,2,0]
-                self.button_1.grid(row=2, column=columns[0], columnspan=2, sticky="news", padx=(0,10), pady=10) 
-                self.button_2.grid(row=2, column=columns[1], columnspan=2, sticky="news", padx=10, pady=10)
-                self.button_3.grid(row=2, column=columns[2], columnspan=2, sticky="news", padx=(10,0), pady=10)
+                self.button_1.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(0,10), pady=10) 
+                self.button_2.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=10, pady=10)
+                self.button_3.grid(row=2, column=columns[2], columnspan=span, sticky="news", padx=(10,0), pady=10)
             elif option_2:
                 self.frame_top.columnconfigure((0,5), weight=1)
                 columns = [2,3]
                 self.button_1.grid(row=2, column=columns[0], sticky="news", padx=(0,5), pady=10)
                 self.button_2.grid(row=2, column=columns[1], sticky="news", padx=(5,0), pady=10)
             else:
-                self.frame_top.columnconfigure((0,2,4), weight=2)
-                self.button_1.grid(row=2, column=2, columnspan=2, sticky="news", padx=(0,10), pady=10)   
+                if button_width:
+                    self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
+                else:
+                    self.frame_top.columnconfigure((0,2,4), weight=2)
+                self.button_1.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=(0,10), pady=10)   
         elif self.justify=="left":
             self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
-            columns = [0,2,4]
-            self.button_1.grid(row=2, column=columns[0], columnspan=2, sticky="news", padx=(10,0), pady=10)
-            if option_2:  
-                self.button_2.grid(row=2, column=columns[1], columnspan=2, sticky="news", padx=10, pady=10)
+            if button_width:
+                columns = [0,1,2]
+                span = 1
+            else:        
+                columns = [0,2,4]
+                span = 2
             if option_3:
-                self.button_3.grid(row=2, column=columns[2], columnspan=2, sticky="news", padx=(0,10), pady=10)
+                self.button_1.grid(row=2, column=columns[2], columnspan=span, sticky="news", padx=(0,10), pady=10)
+                self.button_2.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=10, pady=10)
+                self.button_3.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(10,0), pady=10)
+            elif option_2:
+                self.button_1.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=10, pady=10)
+                self.button_2.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(10,0), pady=10)
+            else:
+                self.button_1.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(10,0), pady=10)
         else:
             self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
-            columns = [4,2,0]
-            self.button_1.grid(row=2, column=columns[0], columnspan=2, sticky="news", padx=(0,10), pady=10)
+            if button_width:
+                columns = [5,4,3]
+                span = 1
+            else:
+                columns = [4,2,0]
+                span = 2
+            self.button_1.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(0,10), pady=10)
             if option_2:  
-                self.button_2.grid(row=2, column=columns[1], columnspan=2, sticky="news", padx=10, pady=10)
+                self.button_2.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=10, pady=10)
             if option_3:
-                self.button_3.grid(row=2, column=columns[2], columnspan=2, sticky="news", padx=(10,0), pady=10)
+                self.button_3.grid(row=2, column=columns[2], columnspan=span, sticky="news", padx=(10,0), pady=10)
                         
         if header:
             self.title_label.configure(text="")
@@ -296,6 +321,9 @@ class CTkMessagebox(customtkinter.CTkToplevel):
 
         if self.winfo_exists():
             self.grab_set()
+
+        if self.sound:
+            self.bell()
             
         if self.fade:
             self.fade_in()
