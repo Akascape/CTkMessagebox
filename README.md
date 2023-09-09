@@ -174,7 +174,4 @@ app.mainloop()
 
 ## That's all, hope it will help in UI development! 
 
-<a href='https://ko-fi.com/H2H6OICP8' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a> 
-### Please support if you want more projects like this.
-
 </div>
