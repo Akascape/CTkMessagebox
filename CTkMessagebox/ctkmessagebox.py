@@ -282,7 +282,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                     self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
                 else:
                     self.frame_top.columnconfigure((0,2,4), weight=2)
-                self.button_1.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=(0,10), pady=10)   
+                if self.option_1 != None:
+                    self.button_1.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=(0,10), pady=10)   
         elif self.justify=="left":
             self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
             if button_width:
@@ -298,7 +299,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             elif option_2:
                 self.button_1.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=10, pady=10)
                 self.button_2.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(10,0), pady=10)
-            else:
+            elif option_1 != None:
                 self.button_1.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(10,0), pady=10)
         else:
             self.frame_top.columnconfigure((0,1,2,3,4,5), weight=1)
@@ -308,7 +309,8 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             else:
                 columns = [4,2,0]
                 span = 2
-            self.button_1.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(0,10), pady=10)
+            if option_1 != None:
+                self.button_1.grid(row=2, column=columns[0], columnspan=span, sticky="news", padx=(0,10), pady=10)
             if option_2:  
                 self.button_2.grid(row=2, column=columns[1], columnspan=span, sticky="news", padx=10, pady=10)
             if option_3:
@@ -333,7 +335,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
             self.option_focus = option_focus
             self.focus_button(self.option_focus)
         else:
-            if not self.option_text_2 and not self.option_text_3:
+            if not self.option_text_2 and not self.option_text_3 and option_1 != None:
                 self.button_1.focus()
                 self.button_1.bind("<Return>", lambda event: self.button_event(self.option_text_1))
  
