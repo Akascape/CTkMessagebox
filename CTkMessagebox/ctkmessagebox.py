@@ -238,11 +238,12 @@ class CTkMessagebox(customtkinter.CTkToplevel):
 
 
         self.option_text_1 = option_1
-        
-        self.button_1 = customtkinter.CTkButton(self.frame_top, text=self.option_text_1, fg_color=self.button_color[0],
-                                                width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                hover_color=self.bt_hv_color, height=self.button_height,
-                                                command=lambda: self.button_event(self.option_text_1))
+                     
+        if option_1 != None:
+            self.button_1 = customtkinter.CTkButton(self.frame_top, text=self.option_text_1, fg_color=self.button_color[0],
+                                                    width=self.button_width, font=self.font, text_color=self.bt_text_color,
+                                                    hover_color=self.bt_hv_color, height=self.button_height,
+                                                    command=lambda: self.button_event(self.option_text_1))
         
 
         self.option_text_2 = option_2 
