@@ -36,6 +36,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
                  bg_color: str = "default",
                  fg_color: str = "default",
                  text_color: str = "default",
+                 wraplength: int = 200,
                  title_color: str = "default",
                  button_text_color: str = "default",
                  button_width: int = None,
@@ -56,6 +57,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         
         super().__init__()
         
+        self.wraplength = wraplength
         
         self.master_window = master
      
@@ -229,7 +231,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         
         self.info = customtkinter.CTkButton(self.frame_top,  width=1, height=self.height/2, corner_radius=0, text=self.message, font=self.font,
                                             fg_color=self.fg_color, hover=False, text_color=self.text_color, image=self.icon)
-        self.info._text_label.configure(wraplength=self.width/2, justify="left")
+        self.info._text_label.configure(wraplength=self.wraplength, justify="left")
         self.info.grid(row=1, column=0, columnspan=6, sticky="nwes", padx=self.border_width)
         
         if self.info._text_label.winfo_reqheight()>self.height/2:
