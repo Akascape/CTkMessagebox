@@ -183,10 +183,20 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         else:
             self.bt_text_color = button_text_color
 
+        default_button_hover_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["hover_color"])
+
         if button_hover_color=="default":
-            self.bt_hv_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["hover_color"])
+            self.button_hover_color = (default_button_hover_color,default_button_hover_color,default_button_hover_color)
         else:
-            self.bt_hv_color = button_hover_color
+            if type(button_hover_color) is tuple:
+                if len(button_hover_color)==2:                
+                    self.button_hover_color = (button_hover_color[0], button_hover_color[1], default_button_hover_color)
+                elif len(button_hover_color)==1:
+                    self.button_hover_color = (button_hover_color[0], default_button_hover_color, default_button_hover_color)
+                else:
+                    self.button_hover_color = button_hover_color
+            else:
+                self.button_hover_color = (button_hover_color, button_hover_color, button_hover_color)
             
         if border_color=="default":
             self.border_color = self._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["border_color"])
@@ -250,7 +260,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         
         self.button_1 = customtkinter.CTkButton(self.frame_top, text=self.option_text_1, fg_color=self.button_color[0],
                                                 width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                hover_color=self.bt_hv_color, height=self.button_height,
+                                                hover_color=self.button_hover_color[0], height=self.button_height,
                                                 command=lambda: self.button_event(self.option_text_1))
         
 
@@ -258,14 +268,14 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         if option_2:     
             self.button_2 = customtkinter.CTkButton(self.frame_top, text=self.option_text_2, fg_color=self.button_color[1],
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                    hover_color=self.bt_hv_color, height=self.button_height,
+                                                    hover_color=self.button_hover_color[1], height=self.button_height,
                                                     command=lambda: self.button_event(self.option_text_2))
 
         self.option_text_3 = option_3
         if option_3:
             self.button_3 = customtkinter.CTkButton(self.frame_top, text=self.option_text_3, fg_color=self.button_color[2],
                                                     width=self.button_width, font=self.font, text_color=self.bt_text_color,
-                                                    hover_color=self.bt_hv_color, height=self.button_height,
+                                                    hover_color=self.button_hover_color[2], height=self.button_height,
                                                     command=lambda: self.button_event(self.option_text_3))
             
         if self.justify=="center":
@@ -359,7 +369,7 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         try:
             self.selected_button = getattr(self, "button_"+str(option_focus))
             self.selected_button.focus()
-            self.selected_button.configure(border_color=self.bt_hv_color, border_width=3)
+            self.selected_button.configure(border_color=self.button_hover_color, border_width=3)
             self.selected_option = getattr(self, "option_text_"+str(option_focus))
             self.selected_button.bind("<Return>", lambda event: self.button_event(self.selected_option))
         except AttributeError:
