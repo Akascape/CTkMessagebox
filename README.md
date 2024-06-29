@@ -152,9 +152,9 @@ app.mainloop()
   | _topmost_ | disable the topmost window outside the app (bool) |
   | _sound_ | enable the system bell sound when the window popups (bool) |
   | _justify_ | position the buttons to center/right/left |
+  | _wraplenght | change the text wrapping length |
   | _option_focus_ | select an option by default when `Enter` key is pressed |
   | **_fade_in_duration_** | enable a fade-in and fade-out animation (int, default is 0)  |
-  
 
 </div>
 
