@@ -1,7 +1,7 @@
 """
 CustomTkinter Messagebox
 Author: Akash Bora
-Version: 2.6
+Version: 2.7
 """
 
 import customtkinter
@@ -351,7 +351,9 @@ class CTkMessagebox(customtkinter.CTkToplevel):
         if "master" in args:
             del args["master"]
         
-        widget(master=self.frame_top, **args).place(x=x, y=y)
+        new_widget = widget(master=self.frame_top, **args)
+        new_widget.place(x=x, y=y)
+        return new_widget
             
     def focus_button(self, option_focus):
         try:
